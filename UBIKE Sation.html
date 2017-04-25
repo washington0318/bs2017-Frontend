@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <style>
+    /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+
+    #map {
+      height: 100%;
+    }
+    /* Optional: Makes the sample page fill the window. */
+
+    html,
+    body {
+      height: 100%;
+      
+    }
+  </style>
+</head>
+
+<body>
+  <div id="map"></div>
+  <script>  
+    var map;
+    function initMap() {//地圖初始化狀狀態
+      map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 10,
+        center: new google.maps.LatLng(24.994709, 121.311027),
+        mapTypeId: google.maps.MapTypeId.satellite
+        // SATELLITE 3d
+        // satellite 一般
+        
+      });
+
+      // Create a <script> tag and set the USGS URL as the source.  創建<script>標籤，並將USGS URL設置為源。
+      // var script = document.createElement('script');
+      // This example uses a local copy of the GeoJSON stored at 此示例使用存儲在其中的GeoJSON的本地副本
+      // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
+      // script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
+      // script.src = 'http://buildschool-chu.azurewebsites.net/parking/index?area=桃園區';
+      // document.getElementsByTagName('head')[0].appendChild(script);
+      
+        $.ajax({
+                    type: "GET",
+                    url: "http://buildschool-chu.azurewebsites.net/youbike/index",
+                    data: null,
+                    //用json去尋找停車區域的名子
+                    dataType: "jsonp",
+                    success: function (result) {
+                            $(result).each(function (i, item) {
+                                LatLng = new google.maps.LatLng(item.lat, item.lng);
+                                var maker = new google.maps.Marker({
+                                    position: LatLng,
+                                    map: map,
+                                    title: item.sna
+                                });
+                            });
+                    }});
+  // var information = new google.maps.InfoWindows();
+
+// google.maps.event.addListener(marker, "click", function(e) {
+//   infoWindow.setContent(data.description);
+//   infoWindow.open(map, marker);
+// });  
+    };
+  </script>
+  <script async defer <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZi0IwsmjKAUqzbjBRqGk6AqVx96MgCRQ&callback=initMap"></script>
+  </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+
+</html>
